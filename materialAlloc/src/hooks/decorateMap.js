@@ -1,67 +1,41 @@
-<script setup>
-import { getLine, getMarkers } from '@/hooks/decorateMap.js'
-import { onMounted, watch } from 'vue'
-import { usePointStore } from '@/stores/points'
-import { ref } from 'vue'
+// import { usePointStore } from '@/stores/points'
+// const pointStore = usePointStore()
 
-const Amap = ref(null)
-const map = ref(null)
+// 显示存有物资的点位
+const getMarkers = (AMap, map, allPointPosition) => {
+    allPointPosition.forEach((point) => {
+        // 创建 Marker 实例
+        if (!point.available) {
+            return;
+        }
 
-let props = defineProps({
-  isTransported: Boolean,
-  startPoint: String,
-  endPoint: String,
-  resource: String,
-  amount: Number,
-})
+        var marker = new AMap.Marker({
+            position: new AMap.LngLat(point.position[0], point.position[1]),
+            title: point.name,
+        });
 
-// 监听 isTransported 的变化，当 isTransported 变为 true 时（按钮被点击时），开始绘制线路
-watch(() => props.isTransported,() => {
-  // 因为是异步操作，先保证 Amap 和 map 已经加载
-  if (Amap.value && map.value && props.isTransported) {
-    // ---------------------调用算法获取运输路线-----------------------------
-    console.log(props.startPoint, props.endPoint, props.resource, props.amount);
-    // getRoutes(props.startPoint, props.endPoint, props.resource, props.amount)
-
-    // 测试用
-    const allRoutes = [[{'Lng': 112.5507, 'Lat': 37.8706}, {'Lng': 116.4074, 'Lat': 39.9042}], [{'Lng': 121.4737, 'Lat': 31.2304}, {'Lng': 108.9541, 'Lat':  34.2658}]];
-    
-    // 遍历数组绘制路线
-    allRoutes.forEach((oneRoute) => {
-      getLine(Amap.value, map.value, oneRoute)
-    })
-  }
-})
-
-onMounted(() => {
-  const pointStore = usePointStore()
-
-  AMapLoader.load({
-    key: "558c6b597d3ca113e53bbb5aa78f5d76",  // 申请好的Web端开发者Key，首次调用 load 时必填     
-    version: "2.0",                 // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-  }).then((AMap) => {
-    Amap.value = AMap
-    map.value = new AMap.Map('mapArea', {
-      viewMode: '2D',  // 默认使用 2D 模式
-      zoom: 5,  //初始化地图层级
-      mapStyle: 'amap://styles/whitesmoke',  //设置地图的显示样式
-      center: [112.5507, 37.8706]  //初始化地图中心点
-    })
-
-    // 获取初始物资点点位
-    getMarkers(AMap, map.value, pointStore.allPointPosition)
-  })
-})
-
-</script>
-<template>
-  <div id="mapArea">
-  </div>
-</template>
-
-<style>
-#mapArea {
-  width: 100%;
-  height: 100vh;
+        // 将 Marker 实例添加至地图
+        map.add(marker);
+    });
 }
-</style>
+// 绘制路径折线
+const getLine = (AMap, map, oneRouteArray) => {
+    // routeArray为数组，其中的元素为列表类型，存储了路径的经纬度信息
+    var path = [
+        new AMap.LngLat(oneRouteArray[0].Lng, oneRouteArray[0].Lat),
+        new AMap.LngLat(oneRouteArray[1].Lng, oneRouteArray[1].Lat),
+    ];
+
+    // 创建 Polyline 实例
+    var polyline = new AMap.Polyline({
+        path: path,
+        strokeWeight: 2, //线条宽度
+        strokeColor: "blue", //线条颜色
+        lineJoin: "round", //折线拐点连接处样式
+    });
+
+    // 将折线添加至地图实例
+    map.add(polyline);
+}
+
+export { getMarkers, getLine };
