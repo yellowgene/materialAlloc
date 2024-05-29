@@ -9,12 +9,12 @@
         </el-form-item>
         <el-form-item label="类别">
           <el-select v-model="newMaterial.category_id" placeholder="请选择类别" required class="small-input" size="large">
-            <el-option v-for="category in categories" :key="category" :label="category" :value="category" />
+            <el-option v-for="category in categories" :key="category.id" :label="category.name" :value="category.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="库房">
           <el-select v-model="newMaterial.warehouse_id" placeholder="请选择所属库房" required class="small-input" size="large">
-            <el-option v-for="warehouse in availablePoints" :key="warehouse" :label="warehouse" :value="warehouse" />
+            <el-option v-for="warehouse in warehouses" :key="warehouse.id" :label="warehouse.name" :value="warehouse.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="编码">
@@ -33,23 +33,25 @@
 </template>
 
 <script>
-  import { useWarehouseStore } from '@/stores/column.js';
-  import { usePointStore } from '@/stores/points.js';
+  import { useListStore } from '@/stores/column.js';
+  import { useCategoryStore } from '@/stores/category.js';
+  import { useWarehouseStore } from '@/stores/warehouse.js';
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
 
   export default {
     setup() {
       const router = useRouter();
+      const listStore = useListStore();
+      const categoryStore = useCategoryStore();
       const warehouseStore = useWarehouseStore();
-      const pointStore = usePointStore();
 
       const viewMaterialList = () => {
         router.push('/list');
       };
 
       const addNewMaterial = async () => {
-        await warehouseStore.addMaterial(newMaterial.value);
+        await listStore.addMaterial(newMaterial.value);
         newMaterial.value = {
           name: '',
           category_id: '',
@@ -67,15 +69,15 @@
         quantity: 1,
       });
 
-      const categories = ref(['生活日用品', '工具', '食物', '家电']);
-      const availablePoints = computed(() => pointStore.availablePoint); // 获取 availablePoint
+      const categories = computed(() => categoryStore.categories); // 获取 categories
+      const warehouses = computed(() => warehouseStore.warehouses); // 获取 availablePoint
 
       return {
         viewMaterialList,
         addNewMaterial,
         newMaterial,
         categories,
-        availablePoints,
+        warehouses,
       };
     },
   };
