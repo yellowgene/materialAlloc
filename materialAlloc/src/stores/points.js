@@ -217,7 +217,7 @@ export const usePointStore = defineStore('point', () => {
     if (operation === 'add') {
       availablePoint.value.push(point)
     } else if (operation === 'delete') {
-      availablePoint.value.filter((item) => item !== point)
+      availablePoint.value = availablePoint.value.filter((item) => item !== point)
     }
   }
 

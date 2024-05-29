@@ -1,12 +1,17 @@
+// import { usePointStore } from '@/stores/points'
+// const pointStore = usePointStore()
+
 // 显示存有物资的点位
-const getMarkers = (AMap, map, availablePoint) => {
-    availablePoint.forEach((point) => {
+const getMarkers = (AMap, map, allPointPosition) => {
+    allPointPosition.forEach((point) => {
         // 创建 Marker 实例
+        if (!point.available) {
+            return;
+        }
+
         var marker = new AMap.Marker({
-            position: new AMap.LngLat(point.longitude, point.latitude),
+            position: new AMap.LngLat(point.position[0], point.position[1]),
             title: point.name,
-            icon: "https://a.amap.com/jsapi_demos/static/demo-center/icons/dir-via-marker.png",
-            offset: new AMap.Pixel(-13, -30),
         });
 
         // 将 Marker 实例添加至地图
@@ -14,12 +19,11 @@ const getMarkers = (AMap, map, availablePoint) => {
     });
 }
 // 绘制路径折线
-const getLine = (AMap, map) => {
-    // 配置折线路径
+const getLine = (AMap, map, oneRouteArray) => {
+    // routeArray为数组，其中的元素为列表类型，存储了路径的经纬度信息
     var path = [
-        new AMap.LngLat(116.4074, 39.9042),
-        new AMap.LngLat(112.5507, 37.8706),
-        new AMap.LngLat(108.9541, 34.2658),
+        new AMap.LngLat(oneRouteArray[0].Lng, oneRouteArray[0].Lat),
+        new AMap.LngLat(oneRouteArray[1].Lng, oneRouteArray[1].Lat),
     ];
 
     // 创建 Polyline 实例
@@ -34,4 +38,4 @@ const getLine = (AMap, map) => {
     map.add(polyline);
 }
 
-export { getLine };
+export { getMarkers, getLine };
