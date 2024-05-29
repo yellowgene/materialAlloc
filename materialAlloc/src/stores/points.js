@@ -215,9 +215,25 @@ export const usePointStore = defineStore('point', () => {
   const changeAvailablePoint = (operation, point) => {
     // 判断操作是添加还是删除
     if (operation === 'add') {
+      // 从可用物资点位数组中添加点位
       availablePoint.value.push(point)
+
+      // 从所有物资点位详细信息数组中设置点位为可用
+      allPointPosition.value.forEach((item) => {
+        if (item.name === point) {
+          item.available = true
+        }
+      })
     } else if (operation === 'delete') {
+      // 从可用物资点位数组中删除点位
       availablePoint.value = availablePoint.value.filter((item) => item !== point)
+
+      // 从所有物资点位详细信息数组中设置点位为不可用
+      allPointPosition.value.forEach((item) => {
+        if (item.name === point) {
+          item.available = false
+        }
+      })
     }
   }
 
