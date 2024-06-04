@@ -3,6 +3,7 @@ import { getLine, getMarkers } from '@/hooks/decorateMap.js'
 import { onMounted, watch } from 'vue'
 import { usePointStore } from '@/stores/points'
 import { ref } from 'vue'
+import {finalRoute} from '@/stores/city.js';
 
 const Amap = ref(null)
 const map = ref(null)
@@ -24,8 +25,8 @@ watch(() => props.isTransported,() => {
     // getRoutes(props.startPoint, props.endPoint, props.resource, props.amount)
 
     // 测试用
-    const allRoutes = [[{'Lng': 112.5507, 'Lat': 37.8706}, {'Lng': 116.4074, 'Lat': 39.9042}], [{'Lng': 121.4737, 'Lat': 31.2304}, {'Lng': 108.9541, 'Lat':  34.2658}]];
-    
+    const allRoutes = finalRoute.value;
+    console.log("route:",allRoutes)
     // 遍历数组绘制路线
     allRoutes.forEach((oneRoute) => {
       getLine(Amap.value, map.value, oneRoute)
