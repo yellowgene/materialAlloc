@@ -71,11 +71,14 @@
   .menu-title {
     transition: opacity 0.3s ease;
     opacity: 0;
+	margin-left:20px;
+	user-select: none;
   }
   
   .menu-text {
     transition: opacity 0.3s ease;
     opacity: 0;
+	user-select:none
   }
   
   .sidebar-active .menu-title,

@@ -239,3 +239,208 @@ export const usePointStore = defineStore('point', () => {
 
   return { availablePoint, allPointPosition, changeAvailablePoint }
 })
+
+export const  allPointPosition = ref([
+  {
+    name: '哈尔滨',
+    position: [126.6425, 45.757],
+    // 该点位的物资资源详情
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    // 该点位是否可用
+    available: true,
+  },
+  {
+    name: '长春',
+    position: [125.3245, 43.8868],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '沈阳',
+    position: [123.4647, 41.6775],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '乌鲁木齐',
+    position: [87.564988, 43.84038],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '呼和浩特',
+    position: [111.75199, 40.84149],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '北京',
+    position: [116.4074, 39.9042],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '银川',
+    position: [106.231, 38.4878],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '太原',
+    position: [112.5497, 37.8705],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '济南',
+    position: [117.1201, 36.6527],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '西安',
+    position: [108.9396, 34.3432],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '郑州',
+    position: [113.6581, 34.7458],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '成都',
+    position: [104.0663, 30.573],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '重庆',
+    position: [106.5505, 29.5637],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '武汉',
+    position: [114.3046, 30.5934],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '南京',
+    position: [118.7967, 32.0593],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '上海',
+    position: [121.4737, 31.2305],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '杭州',
+    position: [120.1536, 30.2875],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '长沙',
+    position: [112.9823, 28.1941],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '昆明',
+    position: [102.7123, 25.0406],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+  {
+    name: '福州',
+    position: [119.3062, 26.0753],
+    resourceDetail: {
+      'resourceA': 0,
+      'resourceB': 0,
+      'resourceC': 0,
+    },
+    available: true,
+  },
+])

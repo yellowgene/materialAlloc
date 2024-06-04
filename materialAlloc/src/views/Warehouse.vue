@@ -1,3 +1,5 @@
+
+
 <template>
     <div id="Warehouse">
       <side-bar />
