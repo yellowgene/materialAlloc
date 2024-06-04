@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 
 export const usePointStore = defineStore('point', () => {
   const availablePoint = ref(['哈尔滨', '长春', '沈阳', '乌鲁木齐', '呼和浩特', '北京', '银川', '太原', '济南',
-    '西安', '郑州', '成都', '重庆', '武汉', '南京', '上海', '杭州', '长沙', '昆明', '福州']);  // 可用物资点位数组（名称）
+    '西安', '郑州', '成都', '重庆', '武汉', '南京', '上海', '杭州', '长沙', '昆明']);  // 可用物资点位数组（名称）
 
   // 所有物资点位详细信息数组（点位、资源数、是否可用）
   const allPointPosition = ref([
@@ -240,7 +240,7 @@ export const usePointStore = defineStore('point', () => {
   return { availablePoint, allPointPosition, changeAvailablePoint }
 })
 
-export const  allPointPosition = ref([
+export const allPointPosition = ref([
   {
     name: '哈尔滨',
     position: [126.6425, 45.757],
@@ -433,14 +433,14 @@ export const  allPointPosition = ref([
     },
     available: true,
   },
-  {
-    name: '福州',
-    position: [119.3062, 26.0753],
-    resourceDetail: {
-      'resourceA': 0,
-      'resourceB': 0,
-      'resourceC': 0,
-    },
-    available: true,
-  },
+  // {
+  //   name: '福州',
+  //   position: [119.3062, 26.0753],
+  //   resourceDetail: {
+  //     'resourceA': 0,
+  //     'resourceB': 0,
+  //     'resourceC': 0,
+  //   },
+  //   available: true,
+  // },
 ])

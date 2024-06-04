@@ -81,7 +81,7 @@ const startTransport = () => {
       <el-option label="物资C" value="resourceC"></el-option>
     </el-select>
     <!-- 物资数量选择框 -->
-    <el-input-number v-model="amount" :min="1" :max="100" />
+    <el-input-number v-model="amount" :min="1" :max="5000" />
     <el-button type="primary" size="large" @click="startTransport">开始运输</el-button>
   </div>
   <div class="mapArea">
