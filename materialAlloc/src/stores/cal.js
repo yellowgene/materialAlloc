@@ -18,9 +18,7 @@ export function BuildNodes(V) {
 // E: array of edges
 export function BuildGraph(V, E) {
     let graph = {};
-
     graph.nodes = BuildNodes(V);
-
     for (let i = 0; i < E.length; i++) {
         let edge = E[i];
         let u = edge.u;
@@ -30,83 +28,95 @@ export function BuildGraph(V, E) {
         graph.nodes[u].edges[v] = len;
         graph.nodes[v].edges[u] = len;
     }
-
     // initialize routing table for each node
     for (let node in graph.nodes) {
         graph.nodes[node].routing = {};
+        graph.nodes[node].routing[node] = 0;
         for (let dest in graph.nodes[node].edges) {
             graph.nodes[node].routing[dest] = graph.nodes[node].edges[dest];
         }
     }
-
-    for (let i = 0; i < V.length; i++) {
+    for (let i = 0; i < 2 * V.length; i++) {
+        console.log()
         // update routing table of node from all neighbors
         // repeat until no change (at most |V| - 1 times)
-
         for (let node in graph.nodes) {
             for (let neighbor in graph.nodes[node].edges) {
                 let len = graph.nodes[node].edges[neighbor];
                 // total cost = distance + 100 * hops
-                for (let dest in graph.nodes[neighbor].edges) {
-                    let cost = len + graph.nodes[neighbor].edges[dest] + 100;
-                    if (cost < graph.nodes[node].routing[dest]) {
+                for (let dest in graph.nodes[neighbor].routing) {
+                    if(dest == node)
+                        continue;
+                    let cost = len + graph.nodes[neighbor].routing[dest] + 100;
+                    if (graph.nodes[node].routing[dest]===undefined ||  cost < graph.nodes[node].routing[dest]) {
                         graph.nodes[node].routing[dest] = cost;
                     }
                 }
             }
         }
     }
-
     return graph;
 }
 
 export function FindRoute(graph, source, destination) {
 
-    let visited = {};
+    let totalVis = {}
+    let visited = [];
     let stack = [];
 
     // for each node, try each neighbor recursively
     // in the order of increasing cost
 
     stack.push(source);
-    visited[source] = true;
+    visited.push({});
+    totalVis[source] = true
 
     while (stack.length > 0) {
         // node is the top of the stack
         console.log(stack);
         let node = stack[stack.length - 1];
-        if(node === destination) {
+        if (node === destination) {
             break;
         }
         let neighbors = graph.nodes[node].edges;
 
-        let minCost = Number.MAX_VALUE;
-        let minNeighbor = null;
-        for (let neighbor in neighbors) {
-            if (visited[neighbor] || graph.nodes[neighbor].usage >= graph.nodes[neighbor].capacity) {
+        // sort neighbors by cost to destination
+        let sortedNeighbors = Object.keys(neighbors).sort(function (a, b) {
+            // console.log("A:",a,"B:",b,"Dest:",destination)
+            let destA = graph.nodes[a].routing[destination] + graph.nodes[node].edges[a] + 100;
+            let destB = graph.nodes[b].routing[destination] + graph.nodes[node].edges[b] + 100;
+            return destA - destB;
+            // return graph.nodes[a].routing[destination] - graph.nodes[b].routing[destination];
+        });
+        // console.log("node:",node);
+        // console.log(sortedNeighbors);
+        let TryNeighbor = null;
+        for (let i = 0; i < sortedNeighbors.length; i++) {
+            let neighbor = sortedNeighbors[i];
+            if (totalVis[neighbor]) {
                 continue;
             }
-            let cost;
-            if (neighbor === destination) {
-                cost = graph.nodes[node].edges[neighbor];
-            } else {
-                cost = graph.nodes[node].edges[neighbor] + graph.nodes[neighbor].routing[destination] + 60;
+            if (visited[stack.length - 1][neighbor] || graph.nodes[neighbor].usage >= graph.nodes[neighbor].capacity) {
+                continue;
             }
-            if (cost < minCost) {
-                minCost = cost;
-                minNeighbor = neighbor;
-            }
-
+            TryNeighbor = neighbor;
+            break;
         }
 
-        if (minNeighbor === null) {
-            // backtrack
+        if (TryNeighbor === null) {
+            // backtrae
+            totalVis[node]=null;
             stack.pop();
+            visited.pop();
         } else {
-            stack.push(minNeighbor);
-            visited[minNeighbor] = true;
+            visited[visited.length - 1][TryNeighbor] = true;
+            totalVis[TryNeighbor]=true;
+            stack.push(TryNeighbor);
+            visited.push({});
         }
     }
+
+
     if (stack.length === 0) {
         return { path: [], capacity: 0 };
     }
@@ -131,19 +141,23 @@ export function ApplyRoute(graph, route, amount) {
 // contract: {source: string, destination: string, amount: number}
 // return: remaining amount
 export function NewContract(graph, contract) {
-    console.log("contract:",contract)
-    let remain = contract.amount;
-    let totalRoute= []
+    console.log("contract:", contract)
+    let remain = contract.amount
+    let totalRoute = []
     while (remain > 0) {
+        if(graph.nodes[contract.destination].usage >= graph.nodes[contract.destination].capacity)
+        {
+            break;
+        }
         let route = FindRoute(graph, contract.source, contract.destination);
         if (route.capacity === 0) {
             break;
         }
         ApplyRoute(graph, route, Math.min(route.capacity, remain));
         totalRoute.push(route)
-        console.log("当前已有路径：",totalRoute,"route:",route)
+        console.log("当前已有路径：", totalRoute, "route:", route)
         remain -= Math.min(route.capacity, remain);
-        console.log("remain:",remain)
+        console.log("remain:", remain)
     }
     return totalRoute
 }

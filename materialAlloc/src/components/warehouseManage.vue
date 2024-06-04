@@ -35,6 +35,7 @@
   import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { usePointStore } from '@/stores/points';
+  import {useUserStore} from "@/stores/user.js";
 
   export default {
     setup() {
@@ -49,14 +50,18 @@
       };
 
       const submit = () => {
-        console.log("submit");
-        pointStore.allPointPosition.forEach(point => {
-          if (point.name === newMaterial.value.warehouse_id) {
-            console.log(newMaterial.value.quantity);
-            point.resourceDetail[newMaterial.value.name] += newMaterial.value.quantity;
-          }
-        });
-      };
+        if (useUserStore().getCurrentUser.role === 'user') {
+          window.alert("您不是管理员或领导，不能进行操作！")
+        } else {
+          pointStore.allPointPosition.forEach(point => {
+            if (point.name === newMaterial.value.warehouse_id) {
+              console.log(newMaterial.value.quantity);
+              point.resourceDetail[newMaterial.value.name] += newMaterial.value.quantity;
+            }
+          });
+          window.alert("添加物品成功！")
+        }
+      }
 
       const addNewMaterial = () => {
         listStore.addMaterial({ ...newMaterial.value });

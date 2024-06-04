@@ -1,13 +1,15 @@
 <script setup>
 import Map from '@/components/Map.vue'
 import { nextTick, ref } from 'vue'
+import { toRaw } from '@vue/reactivity'
 import { usePointStore } from '@/stores/points.js'
 import SideBar from '@/components/sideBar.vue';
-import  {getDistanceObjects,citiesCap, cityIndex ,cityDistance,getPathPositions,finalRoute} from '@/stores/city.js';
+import  {getDistanceObjects,citiesCap, cityIndex ,cityDistance,getPathPositions,finalRoute,useCapacityStore} from '@/stores/city.js';
 import {BuildGraph,NewContract} from '@/stores/cal.js';
 
 
 const pointStore = usePointStore()
+const capacityStore = useCapacityStore();
 
 // 各个选择框所对应的值
 const startPoint = ref('')
@@ -22,7 +24,9 @@ const isTransported = ref(false)
 const getCitys =() =>{
   console.log("开始计算！")
   const Map = getDistanceObjects(cityIndex ,cityDistance)
-  const Graph = BuildGraph(citiesCap,Map)
+  //console.log(JSON.parse(JSON.stringify(capacityStore.citiesCap)))
+  let caps = JSON.parse(JSON.stringify(capacityStore.citiesCap))
+  const Graph = BuildGraph(caps,Map)
   existGraph = Graph
   let path = NewContract(Graph,{source: startPoint.value, destination: endPoint.value, amount: amount.value})
   console.log(Graph)
@@ -53,8 +57,8 @@ const startTransport = () => {
     })
   }
   else isTransported.value = true
+  pointStore.transferResources(startPoint.value,endPoint.value,resource.value,amount.value);
 
-  console.log('start transport')
 }
 
 

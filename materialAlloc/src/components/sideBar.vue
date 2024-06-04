@@ -17,6 +17,11 @@
           <span class="menu-text">物资列表</span>
         </el-row>
       </el-menu-item>
+      <el-menu-item index="map" :route="{ path: '/capx' }">
+        <el-row>
+          <span class="menu-text">修改容量</span>
+        </el-row>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

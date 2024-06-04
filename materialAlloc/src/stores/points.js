@@ -210,7 +210,29 @@ export const usePointStore = defineStore('point', () => {
     },
     
   ])
+  const transferResources = (startCity, endCity, resource, quantity) => {
+    // 找到起始城市和结束城市的详细信息
+    const startPoint = allPointPosition.value.find(point => point.name === startCity);
+    const endPoint = allPointPosition.value.find(point => point.name === endCity);
 
+    if (!startPoint || !endPoint) {
+      throw new Error('起始城市或结束城市不存在');
+    }
+    // 检查起始城市是否有足够的资源
+    if (startPoint.resourceDetail[resource] < quantity) {
+      throw new Error('起始城市资源不足');
+    }
+    // 减少起始城市的资源
+    startPoint.resourceDetail[resource] -= quantity;
+    // 增加结束城市的资源
+    endPoint.resourceDetail[resource] += quantity;
+  };
+
+  return {
+    availablePoint,
+    allPointPosition,
+    transferResources,
+  };
   // 修改可用物资点位（添加、删除）
   const changeAvailablePoint = (operation, point) => {
     // 判断操作是添加还是删除
